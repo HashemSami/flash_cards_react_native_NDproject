@@ -1,3 +1,5 @@
+import{ADD_DECK, DELETE_DECK, ADD_QUESTION} from '../actions'
+
 export default function decks(state={}, action){
     switch(action.type){
         case ADD_DECK:

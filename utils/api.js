@@ -19,11 +19,29 @@ export function submitEntry(deck){
     })
 }
 
-export function removeEntry(key){
+export function removeEntry(id){
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then((results) => {
-            results[key] = undefined;
-            delete data[key];
+            results[id] = undefined;
+            delete results[id];
             AsyncStorage.setItem(DECKS_STORAGE_KEY, results);
+        })
+}
+
+export function submitQuestion(deckId, question){
+    return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+        .then((results) => {
+            const data = {
+                ...results,
+                [deckId]:{
+                    ...results[deckId],
+                    [questions]:{
+                        ...results[deckId].questions,
+                        question
+                    }
+                }
+            }
+            
+            AsyncStorage.setItem(DECKS_STORAGE_KEY,data );
         })
 }
