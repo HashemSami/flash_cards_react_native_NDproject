@@ -10,15 +10,15 @@ export default function decks(state={}, action){
         case DELETE_DECK:
             let clone = Object.assign({}, state);
             delete clone[action.id];
-            return clone;
+            return {...clone};
         case ADD_QUESTION:
             return{
                 ...state,
                 [deckId]:{
                     ...state[deckId],
-                    [questions]:{
-                        ...state[deckId].questions,
-                        [action.question.id]: action.question
+                    [cards]:{
+                        ...state[deckId].cards,
+                        ...action.question
                     }
                 }
             };

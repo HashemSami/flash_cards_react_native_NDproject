@@ -14,34 +14,36 @@ export function fetchCalendarResults (){
 }
 
 export function submitEntry(deck){
-    return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, {
+    return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
         [deck.id]: deck,
-    })
+    }))
 }
 
 export function removeEntry(id){
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then((results) => {
-            results[id] = undefined;
-            delete results[id];
-            AsyncStorage.setItem(DECKS_STORAGE_KEY, results);
+            const data = JSON.parse(results);
+            data[id] = undefined;
+            delete data[id];
+            AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
         })
 }
 
 export function submitQuestion(deckId, question){
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
+        .then(JSON.parse)
         .then((results) => {
             const data = {
                 ...results,
                 [deckId]:{
                     ...results[deckId],
-                    [questions]:{
-                        ...results[deckId].questions,
+                    [cards]:{
+                        ...results[deckId].cards,
                         question
                     }
                 }
             }
             
-            AsyncStorage.setItem(DECKS_STORAGE_KEY,data );
+            AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(data) );
         })
 }
