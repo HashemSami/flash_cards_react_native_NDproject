@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {connect} from 'react-redux';
-import {handleAddQuestion} from '../actions'
+import {handleAddQuestion} from '../actions';
+import { Button  } from 'react-native-elements';
+import {generateID} from '../utils/helpers';
+
 
 class AddQuestion extends Component{
     state={
@@ -12,10 +15,18 @@ class AddQuestion extends Component{
     onChangeText = (text, part) => {
         this.setState({[part]: text});
     }
+
+    handleSubmit = () => {
+        const {addQuestion, goBack} = this.props;
+        const {question, answer} = this.state;
+        addQuestion(question, answer);
+        goBack();
+    }
+
+
     render(){
         const {deck} = this.props;
         const {question, answer} = this.state;
-        console.log(this.state)
         return(
             <View>
                 <TextInput
@@ -27,6 +38,11 @@ class AddQuestion extends Component{
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                     onChangeText={(text) => this.onChangeText(text, 'answer')}
                     value={answer}
+                />
+                <Button
+                    title="Submit"
+                    onPress={this.handleSubmit}
+                    disabled={!question || !answer}
                 />
             </View>
         )
@@ -47,8 +63,10 @@ function mapDispatchToProps(dispatch, {navigation}){
     return{
         addQuestion: (question, answer) => {
             const qId = generateID()
-
-            dispatch(handleAddQuestion({
+            console.log(entryId)
+            dispatch(handleAddQuestion(
+                entryId,
+                {
                 [qId]:{
                     questionId: qId,
                     question: question,

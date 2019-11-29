@@ -12,13 +12,14 @@ export default function decks(state={}, action){
             delete clone[action.id];
             return {...clone};
         case ADD_QUESTION:
+            const {deckId, question} = action;
             return{
                 ...state,
                 [deckId]:{
                     ...state[deckId],
-                    [cards]:{
+                    cards:{
                         ...state[deckId].cards,
-                        ...action.question
+                        ...question
                     }
                 }
             };

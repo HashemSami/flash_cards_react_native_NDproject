@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 
 function DeckList(props){
     const {list, state} = props;
-    console.log(state)
     const data = list.map((id) => {
         const deckInfo = state[id];
         return {
@@ -15,6 +14,8 @@ function DeckList(props){
         }
         
     })
+
+    // console.log(state)
 
     const keyExtractor = (item, index) => index.toString();
 

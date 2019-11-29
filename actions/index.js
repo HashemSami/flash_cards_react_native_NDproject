@@ -35,15 +35,16 @@ export function handleDeleteDeck(id){
     }
 }
 
-function addquestion(question){
+function addquestion(deckId, question){
     return{
         type: ADD_QUESTION,
+        deckId,
         question
     }
 }
 
-export function handleAddQuestion(question){
+export function handleAddQuestion(deckId, question){
     return (dispatch) =>{
-        submitQuestion(question).then(() => dispatch(addquestion(question)));
+        submitQuestion(deckId, question).then(() => dispatch(addquestion(deckId, question)));
     }
 }

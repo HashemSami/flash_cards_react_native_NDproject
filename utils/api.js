@@ -8,13 +8,15 @@ const DECKS_STORAGE_KEY = 'flashCards:decks';
 
 // This function will grab the calendar data from the fake data onthe _calendar.js
 export function fetchCalendarResults (){
-    AsyncStorage.clear()
+    
     return AsyncStorage.getItem(CALENDAR_STORAGE_KEY)
         .then(formatCalendarResults)
+        AsyncStorage.getItem()
+        AsyncStorage.clear()
 }
 
 export function submitEntry(deck){
-    return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
+        return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
         [deck.id]: deck,
     }))
 }
@@ -33,17 +35,20 @@ export function submitQuestion(deckId, question){
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then(JSON.parse)
         .then((results) => {
+            console.log(deckId)
             const data = {
                 ...results,
                 [deckId]:{
                     ...results[deckId],
-                    [cards]:{
+                    cards:{
                         ...results[deckId].cards,
-                        question
+                        ...question
                     }
                 }
             }
+            console.log(data)
             
-            AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(data) );
+            
+           AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(data));
         })
 }

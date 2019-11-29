@@ -21,6 +21,7 @@ class DeckView extends Component{
 
     render(){
         const {deck} = this.props;
+        // console.log(deck)
         return(
             <View>
                 <Text>{deck.deckName}</Text>
@@ -37,6 +38,7 @@ class DeckView extends Component{
 
 function mapStateToProps(state, {navigation}){
     const {entryId} = navigation.state.params;
+    
     return{
         deck: entryId? state[entryId]: null
     }
