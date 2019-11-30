@@ -4,10 +4,19 @@ import { Button  } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {handleAddDeck} from '../actions';
 import {generateID} from '../utils/helpers';
+import {clearPreviousData} from '../utils/api';
+
 
 class AddDeck extends Component{
     state = {
         deckName : ''
+    }
+
+    componentDidMount(){
+        const {state} = this.props;
+        if(Object.keys(state).length === 0 && state.constructor === Object){
+            clearPreviousData();
+        }
     }
 
     onChangeText = (text) => {
