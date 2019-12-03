@@ -104,7 +104,6 @@ class Quiz extends Component{
                     const card = deckCards[id]
                     return  <Card 
                                 key={id}
-                                length={questionsList.length}
                                 card={card}
                                 index={i}
                                 onSwipe={this.handleRemove}/>
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state, {navigation}){
     const {entryId} = navigation.state.params;
     const deckCards = state[entryId].cards;
-    const qList = Object.keys(deckCards)
+    const qList = Object.keys(deckCards).reverse()
 
     return{
         questionsList: qList,

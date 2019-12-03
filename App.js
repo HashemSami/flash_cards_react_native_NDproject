@@ -85,7 +85,7 @@ const StackNavigator = {
   AddQuestion:{
     screen: AddQuestion,
     navigationOptions: ({ navigation }) => ({
-      title: `Add Question`,
+      title: `Add Card`,
       headerTintColor: white,
       headerStyle: {
         backgroundColor: darkBlue,

@@ -8,21 +8,9 @@ class Card extends Component{
         // setting the configs for the animation
         super(props);
         const position = new Animated.ValueXY();
-        this.flip = new Animated.Value(0)
-        this.value = 0;
-        this.flip.addListener(({value}) => {
-            this.value = value;
-        })
-        this.frontInterpolate = this.flip.interpolate({
-            inputRange: [0, 180],
-            outputRange: ['0deg', '180deg'],
-        })
-        this.backInterpolate = this.flip.interpolate({
-            inputRange: [0, 180],
-            outputRange: ['180deg', '360deg'],
-        })
         this.state = {
             position,
+            showAnswer: false
         };
     }
 
@@ -41,6 +29,11 @@ class Card extends Component{
                     this.props.onSwipe(this.props.index, this.state.position.x._value );
                 }else if (this.state.position.x._value > 150) {
                     this.props.onSwipe(this.props.index, this.state.position.x._value );
+                } else if(this.state.position.y._value > 150){
+                    this.setState((prev) => ({showAnswer: !prev.showAnswer}))
+                    Animated.spring(this.state.position, {
+                        toValue: 0,
+                    }).start()
                 }else{
                     Animated.spring(this.state.position, {
                         toValue: 0,
@@ -58,7 +51,6 @@ class Card extends Component{
     getMainCardStyle(){
         let {position}= this.state;
         return[
-            // styles.mainCard,
             {position: 'absolute'},
             {left: '50%'},
             {marginLeft: -175},
@@ -70,49 +62,43 @@ class Card extends Component{
         ];
     }
 
-    handleShowAnswer = () => {
-        if(this.value >= 90){
-            Animated.spring(this.flip, {toValue: 0, friction: 8, tension:10}).start();
-        }else{
-            Animated.spring(this.flip, {toValue: 180, friction: 8, tension:10}).start();
-        }        
-    }
-
     render(){
-        const fronAnimatedStyle = {
-            transform: [
-                {rotateY: this.frontInterpolate}
-            ]
-        };
-        const backAnimatedStyle = {
-            transform: [
-                {rotateY: this.backInterpolate}
-            ]
-        }
-        const {card, index, length} = this.props;
+        const {card, index} = this.props;
+        const {showAnswer, opacity} = this.state;
         return(
             <View style={styles.container}>
                 <Animated.View
-                    style={[this.getMainCardStyle(), ]}
+                    style={this.getMainCardStyle()}
                     {...this.panResponder.panHandlers}
                 >
-                    <Animated.View style={[styles.card, {backgroundColor: lightPuple}, fronAnimatedStyle]}>
+                    {!showAnswer
+                    ?
+                    <View style={[styles.card, {backgroundColor: lightPuple, opacity}]}>
                         <Text style={styles.cardText}>
                             {card.question}
                         </Text>
-                    </Animated.View>
-                    <Animated.View style={[backAnimatedStyle,styles.card, {backgroundColor: green, position: 'absolute'}]}>
+                    </View>
+                    :
+                    <View style={[styles.card, {backgroundColor: green, opacity}]}>
                         <Text style={styles.cardText}>
                             {card.answer}
                         </Text>
-                    </Animated.View>
-                    <Text style={styles.counterText}>Question {index+1} out of {length}</Text>
-                    
-                        <View style={styles.buttonsView}>
-                            <TouchableOpacity style={styles.answerButton} onPress={this.handleShowAnswer}>
-                                <Text style={styles.buttonText}>Show Answer</Text>
-                            </TouchableOpacity>
+                    </View>
+                    }
+                    <Text style={styles.counterText}>Question {index+1}</Text>
+                    <View style={{justifyContent:'center', alignItems:'center', backgroundColor:white}}>
+                        <View style={styles.answerView}>
+                            <Text style={styles.buttonText}>Show Answer</Text>
+                            <View style={styles.swipeIcon}>
+                                <Text style={{color: purple, fontSize:25}}>Swipe</Text>
+                                <Feather
+                                name='chevrons-down'
+                                color={purple}
+                                size={35}
+                                />  
+                            </View>
                         </View> 
+                    </View>
                     <View style={styles.swipeView}>
                         <View style={styles.swipeInstructions}>
                             <View style={styles.wrong}>
@@ -150,7 +136,7 @@ const styles = StyleSheet.create({
         // marginTop: 10,
     },
     card: {
-        height: 350,
+        height: 300,
         width: 350,
         borderWidth: 1,
         borderColor: gray,
@@ -160,7 +146,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center',
         overflow: 'hidden',
-        backfaceVisibility: 'hidden',
     },
     cardText: {
         flex:2,
@@ -170,18 +155,22 @@ const styles = StyleSheet.create({
     },
     swipeInstructions:{
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: white,
         justifyContent: 'space-around',
         alignItems: 'flex-end'
     },
-    buttonsView:{
+    answerView:{
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: white,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: purple,
+        width:200,
+        margin: 5
     },
-    answerButton: {
+    answerswipe: {
         marginBottom: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -191,8 +180,8 @@ const styles = StyleSheet.create({
         backgroundColor: purple,
     },
     buttonText:{
-        color: white,
-        fontSize: 20
+        color: purple,
+        fontSize: 25
     },
     swipeView:{
         justifyContent: 'space-around',

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, TextInput, StyleSheet } from 'react-native';
+import {View, TextInput, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Button  } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {handleAddDeck} from '../actions';
@@ -32,7 +32,8 @@ class AddDeck extends Component{
     render(){
         const {deckName} = this.state;
         return(
-            <View style={styles.container}>
+            
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <TextInput
                     style={styles.textInput}
                     placeholder='Add a deck name'
@@ -45,7 +46,7 @@ class AddDeck extends Component{
                     onPress={this.add}
                     disabled={!deckName}
                 />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }

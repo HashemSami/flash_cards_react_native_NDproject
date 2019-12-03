@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, TextInput, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {handleAddQuestion} from '../actions';
 import { Button  } from 'react-native-elements';
@@ -27,7 +27,7 @@ class AddQuestion extends Component{
     render(){
         const {question, answer} = this.state;
         return(
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <TextInput
                     style={styles.textInput}
                     multiline
@@ -48,7 +48,7 @@ class AddQuestion extends Component{
                     onPress={this.handleSubmit}
                     disabled={!question || !answer}
                 />
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 };
@@ -56,13 +56,13 @@ class AddQuestion extends Component{
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems:'center',
     },
     textInput: {
-        margin: 20,
+        margin: 10,
         width: 300,
-        height: 100,
+        height: 70,
         fontSize: 20,
         borderRadius: 5,
         borderWidth: 2,
