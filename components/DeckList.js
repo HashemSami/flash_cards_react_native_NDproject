@@ -1,7 +1,8 @@
 import React from 'react';
 import {SafeAreaView, View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import { List,ListItem } from 'react-native-elements';
 import {connect} from 'react-redux';
+import {white, blue, orange} from '../utils/colors';
+
 
 function DeckList(props){
     const {list, state} = props;
@@ -10,20 +11,15 @@ function DeckList(props){
         return {
             id: deckInfo.deckId,
             name: deckInfo.deckName,
-            // add sub titel of numbers of questions
+            qLength: Object.keys(deckInfo.cards).length
         }
         
     })
 
-    // console.log(state)
-
-    const keyExtractor = (item, index) => index.toString();
-
-
     if(!list.length){
         return (
-            <View>
-                <Text>
+            <View style={styles.container}>
+                <Text style={styles.text}>
                     Please add a new Deck!
                 </Text>
             </View>
@@ -34,10 +30,25 @@ function DeckList(props){
             <FlatList
                 data={data}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => 
-                    <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('DeckView', {entryId: item.id})}>
-                        <Text style={styles.title}>{item.name}</Text>
+                renderItem={({item}) => {
+                    const {qLength} = item
+                    return(
+                    <TouchableOpacity 
+                    style={styles.item} 
+                    onPress={() => props.navigation.navigate(
+                        'DeckView', 
+                        {name: item.name, entryId: item.id})}
+                    >
+                        <View style={styles.deckTitle}>
+                            <Text style={{fontSize: 30, color: white}}>{item.name}</Text>
+                            <Text
+                            style={{fontSize: 15, color: white}}
+                            >
+                                {qLength===0? 'No cards in this deck': `${qLength} ${qLength === 1? 'card': 'cards'}`}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
+                    )}
                 }
                 
             />
@@ -48,17 +59,23 @@ function DeckList(props){
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-    //   marginTop: Constants.statusBarHeight,
+      justifyContent:'center',
+      alignItems:'center',
     },
-    item: {
-      backgroundColor: '#f9c2ff',
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
+    deckTitle: {
+        width: 300,
+        height: 100,
+        margin: 10,
+        backgroundColor: orange,
+        borderRadius: 5,
+        justifyContent:'center',
+        alignItems:'center',
     },
-    title: {
-      fontSize: 32,
-    },
+    text:{
+        fontSize: 25,
+        color:blue,
+        textAlign: 'center'
+    }
   });
 
 function mapStateToProps(state){

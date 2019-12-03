@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput} from 'react-native';
+import {View, TextInput, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {handleAddQuestion} from '../actions';
 import { Button  } from 'react-native-elements';
@@ -19,27 +19,31 @@ class AddQuestion extends Component{
     handleSubmit = () => {
         const {addQuestion, goBack} = this.props;
         const {question, answer} = this.state;
-        addQuestion(question, answer);
         goBack();
+        addQuestion(question, answer);
+        
     }
 
-
     render(){
-        const {deck} = this.props;
         const {question, answer} = this.state;
         return(
-            <View>
+            <View style={styles.container}>
                 <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.textInput}
+                    multiline
+                    placeholder = 'Enter your question'
                     onChangeText={(text) => this.onChangeText(text, 'question')}
                     value={question}
                 />
                 <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.textInput}
+                    multiline
+                    placeholder = 'Enter your answer'
                     onChangeText={(text) => this.onChangeText(text, 'answer')}
                     value={answer}
                 />
                 <Button
+                    buttonStyle={styles.button}
                     title="Submit"
                     onPress={this.handleSubmit}
                     disabled={!question || !answer}
@@ -49,11 +53,38 @@ class AddQuestion extends Component{
     }
 };
 
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+    },
+    textInput: {
+        margin: 20,
+        width: 300,
+        height: 100,
+        fontSize: 20,
+        borderRadius: 5,
+        borderWidth: 2,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems:'center',
+    },
+    button: {
+        marginTop: 20,
+        height:50,
+        width: 200,
+        borderRadius:5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+})
+
+
 function mapStateToProps(state, {navigation}){
     const {entryId} = navigation.state.params;
-    console.log(entryId)
     return{
-        deck: entryId? state[entryId]: null
+        deck: entryId? state[entryId]: null,
     }
 }
 
@@ -63,7 +94,6 @@ function mapDispatchToProps(dispatch, {navigation}){
     return{
         addQuestion: (question, answer) => {
             const qId = generateID()
-            console.log(entryId)
             dispatch(handleAddQuestion(
                 entryId,
                 {

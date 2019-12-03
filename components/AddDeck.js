@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, TextInput } from 'react-native';
+import {View, TextInput, StyleSheet } from 'react-native';
 import { Button  } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {handleAddDeck} from '../actions';
@@ -32,14 +32,16 @@ class AddDeck extends Component{
     render(){
         const {deckName} = this.state;
         return(
-            <View>
+            <View style={styles.container}>
                 <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.textInput}
+                    placeholder='Add a deck name'
                     onChangeText={text => this.onChangeText(text)}
                     value={deckName}
                 />
                 <Button
                     title="load"
+                    buttonStyle={styles.button}
                     onPress={this.add}
                     disabled={!deckName}
                 />
@@ -48,6 +50,33 @@ class AddDeck extends Component{
     }
 }
 
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+    },
+    textInput: {
+        margin: 20,
+        width: 300,
+        height: 50,
+        fontSize: 20,
+        borderRadius: 5,
+        borderWidth: 2,
+        padding: 10,
+        justifyContent: 'center',
+        alignItems:'center',
+    },
+    button: {
+        marginTop: 20,
+        height:50,
+        width: 200,
+        borderRadius:5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+})
+
 function mapStateToProps(state){
     return{ 
         state
@@ -55,8 +84,6 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-    // const deckId = generateID()
-    // console.log(deckId)
     return {
         addEntry: (deckName) => {
             const deckId = generateID()

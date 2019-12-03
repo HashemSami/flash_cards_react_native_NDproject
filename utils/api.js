@@ -21,11 +21,11 @@ export function submitEntry(decks){
 export function removeEntry(id){
     return AsyncStorage.getItem(DECKS_STORAGE_KEY)
         .then((results) => {
-            console.log(results)
+            // console.log(results)
             const data = JSON.parse(results);
             data[id] = undefined;
             delete data[id];
-            console.log(data)
+            // console.log(data)
             AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
         })
 }
@@ -44,7 +44,7 @@ export function submitQuestion(deckId, question){
                     }
                 }
             }       
-            console.log(data)
+            // console.log(data)
            AsyncStorage.setItem(DECKS_STORAGE_KEY,JSON.stringify(data));
         })
 }

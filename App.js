@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Platform, StatusBar } from 'react-native';
+import React, {Component} from 'react';
+import { View, Platform, StatusBar } from 'react-native';
 import reducer from './reducers';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
@@ -9,11 +9,14 @@ import DeckList from './components/DeckList';
 import { createAppContainer } from "react-navigation";
 import {createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
-import {FontAwesome, Ionicons} from '@expo/vector-icons';
-import { purple, white } from './utils/colors';
+import {FontAwesome} from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import AddQuestion from './components/AddQuestion';
 import DeckView from './components/DeckView';
+import Quiz from './components/Quiz';
+import {setLocalNotification} from './utils/helpers';
+import {white, darkBlue} from './utils/colors';
+
 
 function CustomStatusBar({backgroundColor, ...props}){
   return(
@@ -47,9 +50,9 @@ const TabNavigatorConfig = {
     header:null
   },
   tabBarOptions:{
-    activeTintColor: Platform.OS === 'ios'? purple : white,
+    activeTintColor: Platform.OS === 'ios'? darkBlue : white,
     style:{
-      height:56, backgroundColor: Platform.OS === 'ios'? white:purple,
+      height:56, backgroundColor: Platform.OS === 'ios'? white:darkBlue,
       shadowColor: 'rgba(0, 0, 0, 0.24)',
       shadowOffset:{
         width: 0, 
@@ -70,30 +73,55 @@ const StackNavigator = {
   },
   DeckView:{
     screen: DeckView,
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.name}`,
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue,
+        color: white
+     }
+    }),
   },
   AddQuestion:{
     screen: AddQuestion,
+    navigationOptions: ({ navigation }) => ({
+      title: `Add Question`,
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue,
+        color: white
+     }
+    }),
+  },
+  Quiz:{
+    screen: Quiz,
+    navigationOptions: ({ navigation }) => ({
+      title: `Quiz!`,
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkBlue,
+        color: white
+     }
+    }),
   }
 }
 
 const MainNavigation = createAppContainer(createStackNavigator(StackNavigator))
 
-export default function App() {
-  return (
-    <Provider store={store}>
-      <View style={{flex:1}}>
-        <CustomStatusBar backgroundColor={purple} barStyle='light-content'/>
-        <MainNavigation/>
-      </View>
-    </Provider>
-  );
+export default class App extends Component{
+  
+  componentDidMount(){
+    setLocalNotification()
+  }
+  
+  render(){
+    return (
+      <Provider store={store}>
+        <View style={{flex: 1}}>
+          <CustomStatusBar backgroundColor={darkBlue} barStyle='light-content'/>
+          <MainNavigation/>
+        </View>
+      </Provider>
+    );
+  }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
