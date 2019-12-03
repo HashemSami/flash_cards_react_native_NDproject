@@ -66,7 +66,7 @@ class Card extends Component{
         const {card, index} = this.props;
         const {showAnswer, opacity} = this.state;
         return(
-            <View style={styles.container}>
+            <View>
                 <Animated.View
                     style={this.getMainCardStyle()}
                     {...this.panResponder.panHandlers}
@@ -132,9 +132,6 @@ class Card extends Component{
 }
 
 const styles = StyleSheet.create({
-    container:{
-        // marginTop: 10,
-    },
     card: {
         height: 300,
         width: 350,
@@ -169,15 +166,6 @@ const styles = StyleSheet.create({
         borderColor: purple,
         width:200,
         margin: 5
-    },
-    answerswipe: {
-        marginBottom: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        height:50,
-        width:150,
-        backgroundColor: purple,
     },
     buttonText:{
         color: purple,
